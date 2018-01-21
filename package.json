@@ -1,7 +1,7 @@
 {
-  "name": "blank-placeholder",
+  "name": "bexample-passport-local-auth-ejs",
   "version": "0.0.1",
-  "description": "Blank Placeholder",
+  "description": "example-passport-local-auth-ejs",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -20,7 +20,7 @@
     "node": "8.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/welcome-project"
+    "url": "https://github.com/PatrickWeaver/EXAMPLE-passport-local-auth-ejs"
   },
-  "license": "MIT"
+  "license": "Unlicense"
 }
