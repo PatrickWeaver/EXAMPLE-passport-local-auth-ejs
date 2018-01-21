@@ -51,10 +51,10 @@ app.set('view engine', 'ejs');
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
-app.use(require('morgan')('combined'));
+//app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+app.use(require('express-session')({ secret: process.env.SECRET, resave: false, saveUninitialized: false }));
 
 // Initialize Passport and restore authentication state, if any, from the
 // session.
@@ -64,7 +64,11 @@ app.use(passport.session());
 // Define routes.
 app.get('/',
   function(req, res) {
-    res.render('home', { user: req.user });
+    if (req.user) {
+      res.redirect('/profile');
+    } else {
+      res.redirect('/login');
+    }
   });
 
 app.get('/login',
@@ -73,15 +77,19 @@ app.get('/login',
   });
   
 app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login' }),
+  passport.authenticate('local', { failureRedirect: '/bad' }),
   function(req, res) {
-    res.redirect('/');
+    res.redirect('/profile');
   });
+
+app.get('/bad', function(req, res){
+  res.send('Bad Login<br><a href="/login">Login</a>');
+});
   
 app.get('/logout',
   function(req, res){
     req.logout();
-    res.redirect('/');
+    res.redirect('/login');
   });
 
 app.get('/profile',
@@ -90,4 +98,6 @@ app.get('/profile',
     res.render('profile', { user: req.user });
   });
 
-app.listen(3000);
+var listener = app.listen(process.env.PORT, function () {
+  console.log('Your app is listening on port ' + listener.address().port);
+});
